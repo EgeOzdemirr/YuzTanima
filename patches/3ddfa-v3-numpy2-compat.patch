@@ -1,0 +1,50 @@
+diff --git a/util/preprocess.py b/util/preprocess.py
+index f7942e9..db07d24 100644
+--- a/util/preprocess.py
++++ b/util/preprocess.py
+@@ -13,7 +13,8 @@ import os
+ from skimage import transform as trans
+ import torch
+ import warnings
+-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
++if hasattr(np, "VisibleDeprecationWarning"):
++    warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+ warnings.filterwarnings("ignore", category=FutureWarning)
+ 
+ """Some code borrowed from https://github.com/sicxu/Deep3DFaceRecon_pytorch
+@@ -31,9 +32,9 @@ def back_resize_ldms(ldms, trans_params):
+ 
+     w = (w0*s).astype(np.int32)
+     h = (h0*s).astype(np.int32)
+-    left = (w/2 - target_size/2 + float((t[0] - w0/2)*s)).astype(np.int32)
++    left = (w/2 - target_size/2 + np.asarray((t[0] - w0/2)*s).item()).astype(np.int32)
+     right = left + target_size
+-    up = (h/2 - target_size/2 + float((h0/2 - t[1])*s)).astype(np.int32)
++    up = (h/2 - target_size/2 + np.asarray((h0/2 - t[1])*s).item()).astype(np.int32)
+     below = up + target_size
+ 
+     ldms[:, 0] = ldms[:, 0] + left
+@@ -52,9 +53,9 @@ def back_resize_crop_img(img, trans_params, ori_img, resample_method = Image.BIC
+     ori_img=Image.fromarray(ori_img)
+     w = (w0*s).astype(np.int32)
+     h = (h0*s).astype(np.int32)
+-    left = (w/2 - target_size/2 + float((t[0] - w0/2)*s)).astype(np.int32)
++    left = (w/2 - target_size/2 + np.asarray((t[0] - w0/2)*s).item()).astype(np.int32)
+     right = left + target_size
+-    up = (h/2 - target_size/2 + float((h0/2 - t[1])*s)).astype(np.int32)
++    up = (h/2 - target_size/2 + np.asarray((h0/2 - t[1])*s).item()).astype(np.int32)
+     below = up + target_size
+ 
+     old_img = ori_img
+@@ -97,9 +98,9 @@ def resize_n_crop_img(img, lm, t, s, target_size=224., mask=None):
+     w0, h0 = img.size
+     w = (w0*s).astype(np.int32)
+     h = (h0*s).astype(np.int32)
+-    left = (w/2 - target_size/2 + float((t[0] - w0/2)*s)).astype(np.int32)
++    left = (w/2 - target_size/2 + np.asarray((t[0] - w0/2)*s).item()).astype(np.int32)
+     right = left + target_size
+-    up = (h/2 - target_size/2 + float((h0/2 - t[1])*s)).astype(np.int32)
++    up = (h/2 - target_size/2 + np.asarray((h0/2 - t[1])*s).item()).astype(np.int32)
+     below = up + target_size
+ 
+     img = img.resize((w, h), resample=RESAMPLING_METHOD)
