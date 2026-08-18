@@ -2,7 +2,7 @@ from pathlib import Path
 import shutil
 
 
-SOURCE_DIR = Path("terorden_arananlar")
+SOURCE_DIR = Path("arananlar")
 DEST_ROOT = Path("public/gallery/persons")
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 

@@ -72,7 +72,7 @@ NOT: NVIDIA GPU yoksa sistem CPU ile çalışır ancak yavaş olabilir.
    ├── ui\                 ← Web arayüzü dosyaları
    ├── public\             ← Galeri fotoğrafları ve 3D modeller
    ├── data\               ← FAISS indeksi ve galeri veritabanı
-   ├── terorden_arananlar\ ← Kaynak fotoğraflar (aranan kişiler)
+   ├── arananlar\          ← Kaynak fotoğraflar (aranan kişiler)
    ├── tools\              ← Galeri yönetim araçları
    ├── scripts\            ← Launcher script
    └── logs\               ← Uygulama logları (otomatik oluşur)
@@ -186,7 +186,7 @@ YÖNTEM A — Web Arayüzü (kolay):
   3. Otomatik olarak galeri indeksi güncellenir.
 
 YÖNTEM B — Manuel:
-  1. terorden_arananlar\ klasörüne kişinin fotoğrafını ekleyin.
+  1. arananlar\ klasörüne kişinin fotoğrafını ekleyin.
      Dosya adı = Kişinin adı (örn: Ahmet YILMAZ.jpg)
   2. Komut İstemi'nde YuzTanima klasöründeyken:
      3ddfav3\Scripts\python.exe tools\galeri_olusturma.py
@@ -285,7 +285,7 @@ data\gallery\           → FAISS indeksi, embedding vektörler
   names.json            → Kişi isimleri listesi
   gallery.json          → Galeri meta verileri
 data\events\            → Canlı tanıma olayları (JSON)
-terorden_arananlar\     → Kaynak fotoğraflar (3268 kişi)
+arananlar\              → Kaynak fotoğraflar (3268 kişi)
 tools\galeri_olusturma.py → Galeri klasörlerini oluşturma aracı
 logs\                   → Uygulama log dosyaları
 

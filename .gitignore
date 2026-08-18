@@ -14,7 +14,7 @@ data/gallery/names.json
 data/events/
 
 # Hassas karşılaştırma/analiz verisi (aranan kişi isimleri, kayıtları)
-data/terorarananlar_compare/
+data/arananlar_compare/
 
 # Kamera çıktıları
 public/captures/
@@ -25,7 +25,7 @@ Baslat.exe
 
 # Hassas fotoğraflar (kişisel veri)
 yuz_tanima_fotoğraflar/
-terorden_arananlar/
+/arananlar/
 
 # Python cache
 __pycache__/

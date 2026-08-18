@@ -88,11 +88,11 @@ Alternatif olarak `pip install "numpy<2"` ile de çözebilirsiniz, ancak yama ö
 ### 5. Kendi fotoğraflarınızı ekleyin
 
 Depoda fotoğraf **yoktur**. Tanınmasını istediğiniz kişilerin fotoğraflarını
-proje kökünde `terorden_arananlar/` klasörü açıp içine koyun.
+proje kökünde `arananlar/` klasörü açıp içine koyun.
 **Dosya adı kişinin adı olur:**
 
 ```
-terorden_arananlar/
+arananlar/
 ├── Ahmet YILMAZ.jpg
 ├── Ayşe DEMİR.png
 └── ...
@@ -182,7 +182,7 @@ Aşağıdakiler bilinçli olarak `.gitignore` ile dışarıda bırakılmıştır
 
 | Dışarıda bırakılan | Neden | Nasıl elde edilir |
 |---|---|---|
-| `terorden_arananlar/`, `yuz_tanima_fotoğraflar/` | **Kişisel veri** | Kendiniz sağlarsınız (Adım 5) |
+| `arananlar/`, `yuz_tanima_fotoğraflar/` | **Kişisel veri** | Kendiniz sağlarsınız (Adım 5) |
 | `public/gallery/`, `public/captures/` | İşlenmiş kişisel veri | Adım 6 üretir |
 | `data/gallery/*` (FAISS indeksi, embeddings) | Türetilmiş veri | Adım 6 üretir |
 | `data/events/` | Çalışma zamanı çıktısı | Otomatik oluşur |
