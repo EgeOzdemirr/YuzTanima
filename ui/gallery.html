@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Görsel Veri Tabanı</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Görsel Veri Tabanı</h1>
+      <p class="subtitle">Galeri kişileri</p>
+    </div>
+  </header>
+
+  <main class="card gallery-db">
+    <div class="gallery-heading">
+  <div>
+    <h2>Şüpheliler Listesi</h2>
+  </div>
+</div>
+    <div class="gallery-grid" id="gallery-grid">
+      <div class="placeholder">Galeri yükleniyor...</div>
+    </div>
+    <div class="plate-section">
+      <h3>Şüpheli Plakalar Listesi</h3>
+      <div id="plate-list" class="plate-list"></div>
+    </div>
+  </main>
+
+  <script type="module" src="./gallery.js"></script>
+</body>
+</html>
+

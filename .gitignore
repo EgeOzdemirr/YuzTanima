@@ -1,0 +1,46 @@
+# Sanal ortam
+3ddfav3/
+
+# Log dosyaları
+logs/
+
+# Oluşturulan yüz veritabanı (galeri_olusturma.py ile yeniden üretilir)
+data/gallery/embeddings.npy
+data/gallery/faiss.index
+data/gallery/gallery.json
+data/gallery/names.json
+
+# Runtime olay verileri
+data/events/
+
+# Hassas karşılaştırma/analiz verisi (aranan kişi isimleri, kayıtları)
+data/terorarananlar_compare/
+
+# Kamera çıktıları
+public/captures/
+public/gallery/
+
+# Derleme çıktısı
+Baslat.exe
+
+# Hassas fotoğraflar (kişisel veri)
+yuz_tanima_fotoğraflar/
+terorden_arananlar/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Model dosyaları (download_models.py ile indirilir)
+*.onnx
+*.pkl
+*.pth
+
+# Indirilen model agirliklari (scripts/download_models.py ile yeniden uretilir)
+services/core/models/weights/
+
+# Windows
+Thumbs.db
+desktop.ini

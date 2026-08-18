@@ -1,0 +1,97 @@
+camera:
+  enabled: true
+  type: webcam
+  webrtc:
+    host: "0.0.0.0"
+    port: 9081
+  preview:
+    enabled: false
+    window_name: "OpenCV Camera"
+    keep_aspect: false
+    mirror: true
+  webcam:
+    device_index: 0
+    backend: dshow
+    auto_scan: true
+    scan_indices: [0, 1, 2]
+  rtsp:
+    url: "rtsp://user:pass@ip:554/Streaming/Channels/101"
+  http_mjpeg:
+    url: "http://ip:8080/video"
+  video_file:
+    path: "/path/to/video.mp4"
+    loop: true
+
+  decode:
+    enabled: true
+    width: 640
+    height: 480
+    keep_aspect: false
+    method: resize
+    fps_limit: 0
+
+schedule:
+  detect_every_n: 3
+  match_every_n: 3  # detect_every_n ile hizali: her eslestirme karesi dedektor karesi olsun
+  save_face_every_n: 1
+  event_every_n: 5
+  log_every_n: 30
+  max_faces_per_frame: 5
+
+tracking:
+  max_time_lost: 12
+  min_iou: 0.1
+  preflip_box_text: true
+  overlay_font_path: "C:/Windows/Fonts/segoeui.ttf"
+  overlay_font_size: 16
+
+paths:
+  public_root: public
+  captures_subdir: captures
+  events_file: data/events/latest_suspicious.json
+
+gallery_index:
+  dir: data/gallery
+  index_file: faiss.index
+  names_file: names.json
+  gallery_file: gallery.json
+
+models:
+  detector:
+    type: scrfd
+    device: cuda
+    weights_path: ""
+    det_size: [640, 640]  # galeri kaydiyla ayni kosullar; FPS duserse [480, 480] dene
+    min_score: 0.55
+  embedder:
+    type: adaface_onnx
+    device: cuda
+    onnx_path: services/core/models/weights/adaface_ir_101.onnx
+    input_size: 112
+
+preprocess:
+  align: true
+  margin: 0.25
+  out_size: 112
+
+match:
+  threshold: 0.55
+  topk: 10                          # marj testi icin kisinin coklu satirlari rakibi dislamasin
+  margin: 0.05                      # top1 - (farkli kisinin en iyisi) bu degerin altindaysa eslesme yok (0 = kapali)
+  confirmation_frames: 2
+  confirm_on_detector_only: true
+  match_detector_frames_only: true  # coasting (hizalanmamis) karelerde embed/eslestirme yapma
+  min_face_px: 60                   # bbox kisa kenari bunun altindaysa eslestirme (0 = kapali)
+  avg_window: 5                     # track basina embedding ortalama penceresi (1 = kapali)
+  flip_tta: false                   # runtime ayna TTA (maliyet 2x embed; ortalama zaten stabilize ediyor)
+  relock_after: 0                   # 0 = kalici kilit; >0 ise N ardisik guclu celiskide kilidi coz
+
+quality:
+  blur_var_min: 0                   # Laplacian varyans esigi (0 = kapali; onerilen 40-60)
+
+ui:
+  live_camera: true
+  live_stream_transport: mjpeg
+  live_stream_fps: 0
+  live_stream_jpeg_quality: 65
+  suspicious_hold_seconds: 10

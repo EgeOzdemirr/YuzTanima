@@ -1,0 +1,17 @@
+numpy
+opencv-python
+onnxruntime-gpu[cuda,cudnn]
+faiss-cpu
+pyyaml
+tqdm
+Pillow
+requests
+torch
+torchvision
+albumentations
+scipy
+scikit-image
+insightface
+torchsummary
+aiohttp
+aiortc

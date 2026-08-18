@@ -1,0 +1,300 @@
+========================================================
+  YUZ TANIMA SİSTEMİ — KURULUM VE KULLANIM TALİMATI
+========================================================
+
+Bu belge, Yüz Tanıma sisteminin başka bir bilgisayara kurulması ve
+çalıştırılması için gereken tüm adımları adım adım açıklamaktadır.
+
+========================================================
+  BÖLÜM 1: SİSTEM GEREKSİNİMLERİ
+========================================================
+
+ZORUNLU:
+  - İşletim Sistemi : Windows 10 (64-bit) veya Windows 11
+  - RAM             : En az 8 GB (16 GB önerilir)
+  - Depolama        : En az 20 GB boş disk alanı
+  - Python 3.13     : https://www.python.org/downloads/release/python-31312/
+                      (Tam sürüm, gömülü değil — aşağıda detay var)
+  - Webcam          : USB veya dahili kamera (canlı tanıma için)
+
+NVIDIA GPU (ÖNERİLEN - daha hızlı çalışma için):
+  - NVIDIA ekran kartı (GTX 1060 ve üzeri)
+  - NVIDIA sürücüsü : Sürüm 525 veya üzeri
+  - CUDA 11.8       : https://developer.nvidia.com/cuda-11-8-0-download-archive
+  - cuDNN 8.x       : https://developer.nvidia.com/cudnn-archive
+    (cuDNN 8.x, CUDA 11.8 için olanı indirin)
+
+NOT: NVIDIA GPU yoksa sistem CPU ile çalışır ancak yavaş olabilir.
+     CPU modunda çalıştırmak için kurulum tamamlandıktan sonra
+     "BÖLÜM 5: KONFİGÜRASYON" bölümündeki talimatları uygulayın.
+
+
+========================================================
+  BÖLÜM 2: PYTHON 3.13 KURULUMU
+========================================================
+
+1) Şu adresten Python 3.13.x indiricisini indirin:
+   https://www.python.org/downloads/release/python-31312/
+
+   Dosya adı: python-3.13.12-amd64.exe  (Windows 64-bit için)
+
+2) İndirilen dosyayı çalıştırın.
+
+3) KURULUM EKRANINDA ÖNEMLİ AYARLAR:
+   - "Add python.exe to PATH" kutusunu İŞARETLEYİN
+   - "Install Now" seçeneğiyle devam edin
+
+   VEYA "Customize installation" seçip:
+   - Kurulum yolunu: C:\Python313 yapın (önerilir, her kullanıcıda aynı yol)
+
+4) Kurulum tamamlandıktan sonra Komut İstemi açın ve şunu yazın:
+   python --version
+
+   Çıktı "Python 3.13.x" gösteriyorsa kurulum başarılıdır.
+
+
+========================================================
+  BÖLÜM 3: PROJE DOSYALARINI KOPYALAMA
+========================================================
+
+1) YuzTanima klasörünün tamamını hedef bilgisayara kopyalayın.
+   Örnek konum: C:\YuzTanima\
+
+   Klasör yapısı şöyle görünmelidir:
+
+   YuzTanima\
+   ├── Baslat.exe          ← Programı başlatan EXE (çift tıkla çalışır)
+   ├── PYTHON_YOLU_GUNCELLE.bat  ← İlk kurulumda çalıştırılacak
+   ├── KURULUM_TALİMATI.txt
+   ├── requirements.txt
+   ├── 3ddfav3\            ← Python sanal ortamı (tüm kütüphaneler burada)
+   ├── services\           ← Kamera ve galeri servisleri
+   ├── ui\                 ← Web arayüzü dosyaları
+   ├── public\             ← Galeri fotoğrafları ve 3D modeller
+   ├── data\               ← FAISS indeksi ve galeri veritabanı
+   ├── terorden_arananlar\ ← Kaynak fotoğraflar (aranan kişiler)
+   ├── tools\              ← Galeri yönetim araçları
+   ├── scripts\            ← Launcher script
+   └── logs\               ← Uygulama logları (otomatik oluşur)
+
+2) Kopyalama tamamlandıktan sonra BİR SONRAKI ADIMA GEÇİN.
+
+
+========================================================
+  BÖLÜM 4: İLK KURULUM (Python yolu güncelleme)
+========================================================
+
+Proje farklı bir bilgisayara taşındığında, Python'un kurulu olduğu
+yolun güncellenmesi gerekir. Bu işlemi SADECE BİR KEZ yapın.
+
+1) YuzTanima klasörünü açın.
+
+2) "PYTHON_YOLU_GUNCELLE.bat" dosyasına çift tıklayın.
+   - Script otomatik olarak Python 3.13'ü bulur.
+   - Bulduğu yolu 3ddfav3\pyvenv.cfg dosyasına yazar.
+   - "pyvenv.cfg guncellendi" mesajını gördüğünüzde işlem tamamdır.
+
+3) Eğer script Python 3.13'ü bulamazsa:
+   - Python 3.13'ün doğru kurulduğundan emin olun.
+   - Komut İstemi açın ve şunu çalıştırın:
+       where python
+   - Çıkan yolu not edin (örn: C:\Python313\python.exe)
+   - Not Defteri ile 3ddfav3\pyvenv.cfg dosyasını açın
+   - "home = ..." satırını bulun ve şöyle değiştirin:
+       home = C:\Python313
+   - Kaydedin.
+
+
+========================================================
+  BÖLÜM 5: KONFİGÜRASYON
+========================================================
+
+---- 5a) KAMERA AYARI ----
+
+YuzTanima klasörü içinde:  services\camera_runtime\config.yaml
+
+Bu dosyayı Not Defteri ile açın.
+
+Webcam indeksi ayarı:
+  webcam:
+    device_index: 1    ← Kamera numarası (0'dan başlar)
+    backend: dshow     ← Windows için dshow, sorun çıkarsa msmf deneyin
+
+Bağlı kameralarınızın numaralarını bulmak için:
+  3ddfav3\Scripts\python.exe scripts\download_models.py
+  (Veya Komut İstemi'nde "python -m cv2" ile test edebilirsiniz)
+
+RTSP kamera kullanmak isterseniz:
+  type: rtsp
+  rtsp:
+    url: "rtsp://kullanici:sifre@ip_adresi:554/Streaming/Channels/101"
+
+---- 5b) GPU / CPU MODU ----
+
+NVIDIA GPU varsa (önerilir):
+  config.yaml içinde:
+    models:
+      detector:
+        device: cuda    ← GPU kullan
+      embedder:
+        device: cuda    ← GPU kullan
+
+NVIDIA GPU yoksa veya CUDA sorun çıkarıyorsa:
+  models:
+    detector:
+      device: cpu       ← CPU kullan
+    embedder:
+      device: cpu       ← CPU kullan
+
+Aynı ayarı services\gallery_builder\config.yaml içinde de yapın.
+
+---- 5c) EŞİK DEĞERLERİ ----
+
+Yanlış tanıma veya çok hassas/duyarsız tanıma durumunda:
+  match:
+    threshold: 0.55    ← Yükseltmek → daha seçici (az yanlış alarm)
+                          Düşürmek  → daha hassas (daha kolay tanıma)
+
+
+========================================================
+  BÖLÜM 6: PROGRAMI ÇALIŞTIRMA
+========================================================
+
+Kurulum tamamlandıktan sonra programı başlatmak için:
+
+  YuzTanima klasöründe "Baslat.exe" dosyasına çift tıklayın.
+
+Program şu işlemleri yapar:
+  1. UI sunucusu başlar (port 8000)
+  2. Kamera servisi başlar
+  3. Tarayıcı otomatik açılır: http://127.0.0.1:8000/ui/index.html
+
+PROGRAM KAPATMA:
+  Açılan konsol penceresini kapatın VEYA Ctrl+C basın.
+  (Tarayıcıyı kapatmak programı durdurmaz!)
+
+
+========================================================
+  BÖLÜM 7: GALERİ YÖNETİMİ
+========================================================
+
+Yeni kişi eklemek için:
+
+YÖNTEM A — Web Arayüzü (kolay):
+  1. Program çalışırken tarayıcıda "İçe Aktar" butonuna tıklayın.
+  2. Kişinin fotoğrafını yükleyin.
+  3. Otomatik olarak galeri indeksi güncellenir.
+
+YÖNTEM B — Manuel:
+  1. terorden_arananlar\ klasörüne kişinin fotoğrafını ekleyin.
+     Dosya adı = Kişinin adı (örn: Ahmet YILMAZ.jpg)
+  2. Komut İstemi'nde YuzTanima klasöründeyken:
+     3ddfav3\Scripts\python.exe tools\galeri_olusturma.py
+  3. Ardından galeri indeksini yenileyin:
+     3ddfav3\Scripts\python.exe services\gallery_builder\build_gallery.py
+       --config services\gallery_builder\config.yaml
+
+
+========================================================
+  BÖLÜM 8: SORUN GİDERME
+========================================================
+
+SORUN: "Python ortami bulunamadi: 3ddfav3\Scripts\python.exe"
+ÇÖZÜM: PYTHON_YOLU_GUNCELLE.bat'ı çalıştırın.
+       Hâlâ hata alıyorsanız Python 3.13'ü yeniden kurun.
+
+SORUN: Tarayıcı açılmıyor veya sayfa boş geliyor
+ÇÖZÜM: Tarayıcıyı kendiniz açın: http://127.0.0.1:8000/ui/index.html
+       Baslat.exe'nin hâlâ çalıştığından emin olun.
+
+SORUN: "8000 portu zaten dolu"
+ÇÖZÜM: Eski bir Baslat penceresi açık kalmış olabilir. Görev Yöneticisi'nden
+       önceki Baslat.exe işlemini sonlandırın.
+
+SORUN: Kamera görüntüsü gelmiyor
+ÇÖZÜM: services\camera_runtime\config.yaml dosyasındaki device_index
+       değerini değiştirin (0, 1, 2... deneyin).
+       backend: dshow yerine msmf veya auto deneyin.
+
+SORUN: CUDA/GPU hatası
+ÇÖZÜM: config.yaml içinde device: cpu yapın.
+       Veya NVIDIA sürücülerini ve CUDA 11.8'i kurun.
+
+SORUN: "faiss.index bulunamadı" veya tanıma çalışmıyor
+ÇÖZÜM: Galeri indeksi boş veya bozuk. Şunu çalıştırın:
+       3ddfav3\Scripts\python.exe services\gallery_builder\build_gallery.py
+         --config services\gallery_builder\config.yaml
+
+SORUN: Logları incelemek istiyorum
+ÇÖZÜM: YuzTanima\logs\ klasöründeki .log dosyalarına bakın.
+       En son dosyalar en yeni çalıştırmaya aittir.
+
+
+========================================================
+  BÖLÜM 9: YAPIYI SIFIRDAN KURMA (venv yeniden oluşturma)
+========================================================
+
+Eğer 3ddfav3 klasörü çalışmıyorsa ve Python 3.13 kuruluysa,
+aşağıdaki adımlarla yeniden oluşturabilirsiniz.
+(Bu işlem ~30-60 dakika sürebilir, internet bağlantısı gerekir)
+
+1) YuzTanima klasöründe Komut İstemi açın.
+
+2) Eski venv'i silin:
+   rmdir /s /q 3ddfav3
+
+3) Yeni venv oluşturun:
+   python -m venv 3ddfav3
+
+4) Paketi kurun:
+   3ddfav3\Scripts\python.exe -m pip install --upgrade pip
+   3ddfav3\Scripts\python.exe -m pip install -r requirements.txt
+
+5) ONNX model ağırlıklarını indirin:
+   3ddfav3\Scripts\python.exe scripts\download_models.py
+
+6) Galeri indeksini yenileyin:
+   3ddfav3\Scripts\python.exe services\gallery_builder\build_gallery.py
+     --config services\gallery_builder\config.yaml
+
+7) Baslat.exe ile programı başlatın.
+
+NOT: GPU paketleri için özel pip komutları gerekebilir.
+     PyTorch CUDA versiyonu için: https://pytorch.org/get-started/locally/
+     onnxruntime-gpu için: pip install onnxruntime-gpu
+
+
+========================================================
+  DOSYA/KLASÖR AÇIKLAMALARI
+========================================================
+
+Baslat.exe              → Programı başlatan yürütülebilir dosya
+Baslat.bat              → Bat versiyonu başlatıcı
+3ddfav3\                → Python 3.13 sanal ortamı (tüm kütüphaneler)
+services\               → Python servisleri
+  camera_runtime\       → Kamera ve yüz tanıma pipeline
+  gallery_builder\      → Galeri oluşturma ve web sunucusu
+  core\                 → Temel model sınıfları
+  tddfa\                → 3D yüz modeli oluşturma (3DDFA-V3)
+ui\                     → Web arayüzü (HTML/JS/CSS)
+public\gallery\         → İşlenmiş galeri (her kişi için klasör)
+  persons\              → Her kişinin klasörü (photo.jpg, face.glb)
+data\gallery\           → FAISS indeksi, embedding vektörler
+  faiss.index           → Hızlı yüz arama indeksi
+  embeddings.npy        → Embedding vektörleri (NumPy formatı)
+  names.json            → Kişi isimleri listesi
+  gallery.json          → Galeri meta verileri
+data\events\            → Canlı tanıma olayları (JSON)
+terorden_arananlar\     → Kaynak fotoğraflar (3268 kişi)
+tools\galeri_olusturma.py → Galeri klasörlerini oluşturma aracı
+logs\                   → Uygulama log dosyaları
+
+========================================================
+  VERSİYON BİLGİSİ
+========================================================
+
+Python       : 3.13.12
+PyInstaller  : 6.21.0
+Platform     : Windows 11 (64-bit)
+Derleme      : 2026-06-24
+========================================================

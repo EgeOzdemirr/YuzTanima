@@ -1,0 +1,54 @@
+gallery:
+  persons_root: public/gallery/persons
+  photo_glob: "photo.*"
+  reference_photo_globs:
+    - "photo.*"
+    - "variants/*.*"
+  glb_name: "face.glb"
+
+index:
+  output_dir: data/gallery
+  embeddings_file: embeddings.npy
+  names_file: names.json
+  index_file: faiss.index
+  gallery_file: gallery.json
+  embedding_dim: 512
+  normalize: true
+  dedupe_threshold: 0.999  # ayni kisinin kosinus >= bu olan kopya satirlarini at (0 = kapali)
+
+augment:
+  flip_tta: true  # referans foto + aynalanmis halinin ortalama embeddingi
+
+models:
+  detector:
+    type: scrfd
+    device: cuda
+    weights_path: ""
+    det_size: [640, 640]
+    min_score: 0.45
+  embedder:
+    type: adaface_onnx
+    device: cuda
+    onnx_path: services/core/models/weights/adaface_ir_101.onnx
+    input_size: 112
+
+build3d:
+  enabled: true
+  tddfa_repo: services/tddfa/repo
+  blender_bin: "C:/Program Files/Blender Foundation/Blender 4.5/blender.exe"
+  assimp_bin: assimp
+  device: cpu
+  use_tddfa: true
+  extractTex: 1
+  iscrop: 1
+  backbone: resnet50
+  detector: scrfd
+  resume_from_last_glb: false
+  resume_from_person: ""
+  resume_from_person_inclusive: true
+  num_workers: 8
+
+preprocess:
+  align: true
+  margin: 0.25
+  out_size: 112

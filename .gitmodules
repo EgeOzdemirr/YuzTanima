@@ -1,0 +1,3 @@
+[submodule "services/tddfa/repo/3DDFA-V3"]
+	path = services/tddfa/repo/3DDFA-V3
+	url = https://github.com/wang-zidu/3DDFA-V3

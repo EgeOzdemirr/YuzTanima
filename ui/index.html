@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awatar Watch</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/examples/jsm/loaders/GLTFLoader": "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+        "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title">
+      <h1>Yapay Zeka Destekli Güvenlik Sistemleri</h1>
+    </div>
+    <div class="nav-buttons">
+      <a class="nav-btn" href="./gallery.html">Görsel Veri Tabanı</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="primary-column">
+      <section class="card live-card">
+        <div class="card-header">
+          <h2>Canlı Kamera</h2>
+          <span id="capture-id" class="label">-</span>
+        </div>
+        <div class="media-frame video-frame">
+          <video id="live-video" autoplay playsinline muted></video>
+          <img id="live-mjpeg" alt="Canlı kamera" hidden />
+        </div>
+      </section>
+    </section>
+
+    <section class="card compact-card gallery-card">
+      <div class="card-header">
+        <h2>Tanınan Kişiler</h2>
+        <span id="gallery-id" class="label">-</span>
+        <span id="status-tag" class="pill pill-suspicious pill-inline hidden">ŞÜPHELİ</span>
+      </div>
+      <div id="match-list" class="match-list">
+        <div class="placeholder match-placeholder">Eşleşme bekleniyor</div>
+      </div>
+      <div class="media-frame viewer-frame tiny-frame">
+        <canvas id="viewer-canvas"></canvas>
+        <div class="placeholder">3B model yükleniyor...</div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js?v=20260716-lock-hold"></script>
+</body>
+</html>
