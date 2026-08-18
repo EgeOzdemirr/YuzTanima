@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YuzTanima — Canlı Yüz Tespiti Demosu</title>
+  <meta name="description" content="YuzTanima projesinin SCRFD yüz dedektörü, tarayıcınızda kendi kameranızla çalışıyor. Görüntü cihazınızdan hiç çıkmıyor." />
+  <link rel="stylesheet" href="./demo.css" />
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.webgpu.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>YuzTanima <span class="tag">canlı demo</span></h1>
+      <p class="subtitle">Projenin kendi yüz dedektörü, sizin tarayıcınızda</p>
+    </div>
+    <a class="repo-link" href="https://github.com/EgeOzdemirr/YuzTanima" target="_blank" rel="noopener">
+      Kaynak kod →
+    </a>
+  </header>
+
+  <main class="layout">
+    <section class="card stage-card">
+      <div class="stage" id="stage">
+        <canvas id="view"></canvas>
+
+        <div class="overlay" id="overlay-idle">
+          <div class="overlay-inner">
+            <h2>Kameranızla canlı deneyin</h2>
+            <p>
+              Aşağıdaki düğmeye bastığınızda tarayıcınız kamera izni isteyecek.
+              Görüntü <strong>cihazınızdan hiç çıkmıyor</strong> — tespit tamamen
+              sizin makinenizde, sayfanın içinde çalışıyor. Hiçbir kare sunucuya
+              gönderilmiyor, hiçbir şey kaydedilmiyor.
+            </p>
+            <button id="start-btn" class="btn-primary">Kamerayı başlat</button>
+            <p class="fineprint" id="model-note">Model hazırlanıyor…</p>
+          </div>
+        </div>
+
+        <div class="overlay overlay-error hidden" id="overlay-error">
+          <div class="overlay-inner">
+            <h2 id="error-title">Bir sorun oluştu</h2>
+            <p id="error-text"></p>
+            <button id="retry-btn" class="btn-primary">Tekrar dene</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="statbar">
+        <div class="stat"><span class="stat-label">Tespit süresi</span><span class="stat-value" id="stat-infer">—</span></div>
+        <div class="stat"><span class="stat-label">Tespit hızı</span><span class="stat-value" id="stat-rate">—</span></div>
+        <div class="stat"><span class="stat-label">Görüntü</span><span class="stat-value" id="stat-fps">—</span></div>
+        <div class="stat"><span class="stat-label">Yüz</span><span class="stat-value" id="stat-faces">0</span></div>
+        <div class="stat"><span class="stat-label">Arka uç</span><span class="stat-value" id="stat-backend">—</span></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <h3>Ayarlar</h3>
+
+        <label class="field">
+          <span class="field-label">Girdi çözünürlüğü</span>
+          <select id="ctl-size">
+            <option value="256">256 × 256 — en hızlı</option>
+            <option value="320" selected>320 × 320 — dengeli</option>
+            <option value="480">480 × 480 — hassas</option>
+            <option value="640">640 × 640 — en hassas, yavaş</option>
+          </select>
+          <span class="field-hint">Büyük girdi uzak/küçük yüzleri daha iyi bulur, ama yavaşlar.</span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Güven eşiği: <b id="ctl-thresh-val">0.50</b></span>
+          <input type="range" id="ctl-thresh" min="0.20" max="0.90" step="0.01" value="0.50" />
+          <span class="field-hint">Yükseltmek yanlış tespitleri azaltır, düşürmek zor yüzleri yakalar.</span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" id="ctl-kps" checked />
+          <span>5 anahtar noktayı göster</span>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="ctl-mirror" checked />
+          <span>Aynala (selfie görünümü)</span>
+        </label>
+      </section>
+
+      <section class="card">
+        <h3>Ne çalışıyor?</h3>
+        <dl class="facts">
+          <dt>Model</dt>
+          <dd>SCRFD <code>det_10g</code> — InsightFace buffalo_l paketinden, gerçek sistemin kullandığı dedektörün <em>ta kendisi</em>.</dd>
+          <dt>Çalışma yeri</dt>
+          <dd>Tarayıcınız. ONNX Runtime Web, WebGPU varsa onu, yoksa WASM'i kullanır.</dd>
+          <dt>Çözümleme</dt>
+          <dd>Anchor çözümü, <code>distance2bbox</code>, <code>distance2kps</code> ve NMS adımları Python'daki insightface uygulamasından birebir taşındı ve aynı sayıları ürettiği doğrulandı.</dd>
+        </dl>
+      </section>
+
+      <section class="card note-card">
+        <h3>Bu demo neyi göstermiyor?</h3>
+        <p>
+          Burada yalnızca <strong>yüz tespiti</strong> var. Gerçek sistemdeki
+          <strong>tanıma</strong> adımı (AdaFace ile kimlik eşleştirme) bir yüz
+          veri tabanı gerektiriyor; kişisel veri olduğu için o kısım demoya
+          hiçbir biçimde dahil edilmedi.
+        </p>
+        <p>
+          Tam hat — tespit, tanıma, takip ve 3B yüz modeli üretimi — depodaki
+          kurulum adımlarıyla kendi makinenizde çalıştırılabilir.
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Yüz görüntüleri hiçbir zaman cihazınızdan ayrılmaz.
+      Model dosyası (<span id="model-size">~17 MB</span>) ilk açılışta bir kez indirilir ve tarayıcı önbelleğinde kalır.
+    </p>
+    <p class="fineprint">
+      InsightFace önceden eğitilmiş modelleri ticari olmayan araştırma kullanımı içindir.
+    </p>
+  </footer>
+
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>

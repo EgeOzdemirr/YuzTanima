@@ -1,0 +1,328 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg: #0b0f14;
+  --panel: #121821;
+  --border: #1f2a36;
+  --accent: #2dd4bf;
+  --accent-2: #f59e0b;
+  --danger: #f87171;
+  --text: #e5edf4;
+  --muted: #94a3b8;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(45, 212, 191, 0.12), transparent 34%),
+    radial-gradient(circle at 82% 8%, rgba(245, 158, 11, 0.12), transparent 30%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Space Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  line-height: 1.55;
+}
+
+/* ---------- ust bar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 1180px;
+  margin: 0 auto 20px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+
+.tag {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.14);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.repo-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  white-space: nowrap;
+}
+
+.repo-link:hover { border-color: var(--accent); }
+
+/* ---------- yerlesim ---------- */
+
+.layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.stage-card { padding: 12px; }
+
+.side {
+  display: grid;
+  gap: 16px;
+}
+
+/* ---------- sahne ---------- */
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #06090d;
+}
+
+#view {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  background: rgba(6, 9, 13, 0.88);
+  backdrop-filter: blur(3px);
+}
+
+.overlay.hidden { display: none; }
+
+.overlay-inner { max-width: 460px; }
+
+.overlay h2 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.overlay p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.overlay strong { color: var(--text); }
+
+.overlay-error h2 { color: var(--danger); }
+
+.btn-primary {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 26px;
+  background: var(--accent);
+  color: #04120f;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:disabled { opacity: 0.5; cursor: default; filter: none; }
+
+.fineprint {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ---------- istatistik seridi ---------- */
+
+.statbar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media (max-width: 620px) {
+  .statbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.stat {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- form ---------- */
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.field-label b {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.field-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+select,
+input[type="range"] {
+  width: 100%;
+  font-family: inherit;
+}
+
+select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+input[type="range"] { accent-color: var(--accent); }
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.85rem;
+  margin-bottom: 9px;
+  cursor: pointer;
+}
+
+.checkbox input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+/* ---------- bilgi listesi ---------- */
+
+.facts {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.facts dt {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.facts dd {
+  margin: 3px 0 0;
+  color: var(--muted);
+}
+
+code {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+.note-card { border-color: rgba(245, 158, 11, 0.28); }
+.note-card h3 { color: var(--accent-2); }
+.note-card p {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.note-card p:last-child { margin-bottom: 0; }
+.note-card strong { color: var(--text); }
+
+/* ---------- alt bilgi ---------- */
+
+.footer {
+  max-width: 1180px;
+  margin: 24px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.footer p { margin: 0 0 6px; }

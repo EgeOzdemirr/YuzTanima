@@ -35,6 +35,8 @@ __pycache__/
 
 # Model dosyaları (download_models.py ile indirilir)
 *.onnx
+# Istisna: demo sayfasinin dedektor modeli GitHub Pages'ten servis edilir
+!docs/models/*.onnx
 *.pkl
 *.pth
 

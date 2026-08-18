@@ -7,9 +7,24 @@ Windows tabanlı bir sistem.
 FAISS (hızlı arama) → ByteTrack (takip) → web arayüzü.
 3D yüz modelleri 3DDFA-V3 ile üretilip GLB olarak sunulur.
 
+## Canlı demo
+
+**→ [Tarayıcınızda deneyin](https://egeozdemirr.github.io/YuzTanima/)**
+
+Sistemin yüz dedektörü — aynı SCRFD `det_10g` modeli — doğrudan tarayıcınızda,
+kendi kameranızla çalışır. Kurulum gerekmez.
+
+Kamera görüntüsü **cihazınızdan hiç çıkmaz**: kareler yalnızca sayfa içindeki
+ONNX Runtime oturumuna verilir, hiçbir sunucuya gönderilmez ve kaydedilmez.
+
+Demoda yalnızca *tespit* vardır. *Tanıma* adımı bir yüz veri tabanı gerektirdiği
+ve bu kişisel veri olduğu için demoya dahil edilmemiştir; tam hattı çalıştırmak
+için aşağıdaki kurulum adımlarını izleyin.
+
 > **Not:** Bu depo yalnızca **kaynak kodu** içerir. Model ağırlıkları ve fotoğraflar
 > depoda yoktur — modeller aşağıdaki komutlarla indirilir, fotoğrafları ise
 > kendiniz sağlarsınız. Ayrıntı için [Depoda bulunmayanlar](#depoda-bulunmayanlar).
+> (Tek istisna: demo sayfasının dedektör modeli `docs/models/` altındadır.)
 
 ---
 
@@ -219,6 +234,10 @@ YuzTanima/
 │   ├── galeri_olusturma.py     # Fotograflari kisi klasorlerine donusturur
 │   └── 3d/                     # GLB uretimi ve multiview render araclari
 ├── ui/                         # Web arayuzu (HTML/JS/CSS)
+├── docs/                       # GitHub Pages canli demosu
+│   ├── demo.js                 # Kamera, on isleme, cikarim dongusu
+│   ├── scrfd.js                # SCRFD cikti cozumlemesi (Python portu)
+│   └── models/det_10g.onnx     # Demonun kullandigi dedektor
 ├── tests/                      # Kimlik ve eslestirme testleri
 ├── patches/                    # 3DDFA-V3 uyumluluk yamalari
 └── requirements.txt
