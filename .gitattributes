@@ -1,0 +1,2 @@
+# Yama dosyalari LF kalmali; CRLF cevrimi "git apply" hatasina yol acar
+*.patch text eol=lf
